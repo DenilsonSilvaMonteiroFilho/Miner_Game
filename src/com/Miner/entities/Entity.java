@@ -1,13 +1,17 @@
 package com.Miner.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import com.Miner.entities.Entity;
+import com.Miner.main.Game;
 import com.Miner.world.Camera;
 
 public class Entity {
+	
+	public static BufferedImage MINERIO_FERRO = Game.spritesheet.getSprite(64, 16, 16, 16);
 	
 	public int maskx, masky, mWidth, mHeight;
 
@@ -76,5 +80,7 @@ public class Entity {
 	
 	public void render(Graphics g) {
 		g.drawImage(sprite, this.getX() - Camera.x, this.getY() - Camera.y, null);
+		//g.setColor(Color.blue);
+		//g.fillRect(this.getX() + maskx - Camera.x + 2, this.getY() + masky - Camera.y + 3, mWidth, mHeight);
 		}
 }

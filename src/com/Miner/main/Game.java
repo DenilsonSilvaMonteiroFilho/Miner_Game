@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.JFrame;
 
 import com.Miner.entities.Entity;
+import com.Miner.entities.Inventario;
 import com.Miner.entities.Player;
 import com.Miner.graficos.Spritesheet;
 import com.Miner.world.World;
@@ -34,12 +35,13 @@ public class Game extends Canvas implements Runnable,KeyListener {
 	public static final int SCALE = 3;
 	private BufferedImage image;
 	
-	public List<Entity> entities;
+	public static List<Entity> entities;
 	public static Spritesheet spritesheet;
 	
 	public static World world;
-	
 	public static Player player;
+	public static Inventario inventario;
+
 
 	public Game() {
 		/* Tudo tem de ser inicializado na classe game para poder ser gerado na main */
@@ -49,6 +51,7 @@ public class Game extends Canvas implements Runnable,KeyListener {
 		//INICIALIZANDO OBJETOS
 		image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
+		inventario = new Inventario();
 		spritesheet = new Spritesheet("/spritesheet.png");
 		player = new Player(0, 0, 16, 16, spritesheet.getSprite(33, 0, 16, 16));
 		entities.add(player);
@@ -86,6 +89,8 @@ public class Game extends Canvas implements Runnable,KeyListener {
 			Entity e = entities.get(i);
 			e.tick();
 		}
+		inventario.tick();
+		
 		/**/
 	}
 
@@ -104,6 +109,10 @@ public class Game extends Canvas implements Runnable,KeyListener {
 			Entity e = entities.get(i);
 			e.render(g);
 		}
+		if(inventario.aprestInven) {
+			inventario.render(g);
+		}
+		
 		/**/
 		
 		g.dispose();
@@ -153,29 +162,41 @@ public class Game extends Canvas implements Runnable,KeyListener {
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT ||
 				e.getKeyCode() == KeyEvent.VK_D) {
 			player.right = true;
-			player.front = "rt";
+			Player.front = "rt";
 		}
 		
 		else if(e.getKeyCode() == KeyEvent.VK_LEFT ||
 				e.getKeyCode() == KeyEvent.VK_A) {
 			player.left = true;
-			player.front = "lt";
+			Player.front = "lt";
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_UP ||
 				e.getKeyCode() == KeyEvent.VK_W) {
 			player.up = true;
-			player.front = "up";
+			Player.front = "up";
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_DOWN ||
 				e.getKeyCode() == KeyEvent.VK_S) {
 			player.down = true;
-			player.front = "dn";
+			Player.front = "dn";
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_X || 
 				e.getKeyCode() == KeyEvent.VK_M) {
-			player.action = true;
+			Player.action = true;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_Z ||
+				e.getKeyCode() == KeyEvent.VK_N) {
+			Player.colect = true;
+		}
+		if(e.getKeyCode() == KeyEvent.VK_I) {			
+			if(!Inventario.aprestInven) {
+				Inventario.aprestInven = true;
+			}
+			else {
+				Inventario.aprestInven = false;
+			}
 		}
 		
 	}
@@ -203,7 +224,12 @@ public class Game extends Canvas implements Runnable,KeyListener {
 		
 		if(e.getKeyCode() == KeyEvent.VK_X || 
 				e.getKeyCode() == KeyEvent.VK_M) {
-			player.action = false;
+			Player.action = false;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_Z ||
+				e.getKeyCode() == KeyEvent.VK_N) {
+			Player.colect = false;
 		}
 		
 	}
